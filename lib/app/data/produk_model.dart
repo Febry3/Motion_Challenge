@@ -6,6 +6,7 @@ class Produk {
   int jumlah;
   int durasi;
   int berat;
+  bool isProses;
 
   Produk({
     required this.nama,
@@ -15,5 +16,6 @@ class Produk {
     required this.jumlah,
     required this.durasi,
     required this.berat,
+    this.isProses = true,
   });
 }

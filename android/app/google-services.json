@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621239696274",
+    "project_id": "motionchalle",
+    "storage_bucket": "motionchalle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621239696274:android:6d7342aef59260640b9f4b",
+        "android_client_info": {
+          "package_name": "com.abc.motion_challenge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx-7Zr1lLWYKSR4so_98YQUpyZ-_je1z8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

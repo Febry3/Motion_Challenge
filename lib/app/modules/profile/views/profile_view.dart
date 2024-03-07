@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:motion_challenge/app/data/user_model.dart';
 import 'package:motion_challenge/app/modules/ubahPassword/views/ubah_password_view.dart';
 import 'package:motion_challenge/app/modules/ubahProfil/views/ubah_profil_view.dart';
 
@@ -8,23 +9,40 @@ import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            ProfileBar(),
-            ProfilePage(),
-          ],
+    Get.put(ProfileController());
+    return GetBuilder<ProfileController>(builder: (connector) {
+      return Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              ProfileBar(
+                nama: controller.user.nama,
+                email: controller.user.email,
+              ),
+              ProfilePage(
+                user: controller.user,
+              ),
+              GestureDetector(
+                onTap: () {
+                  controller.perubahan();
+                },
+                child: Text('test'),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
 class ProfileBar extends StatelessWidget {
-  const ProfileBar({super.key});
+  final nama;
+  final email;
+  const ProfileBar({super.key, required this.nama, required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -46,19 +64,19 @@ class ProfileBar extends StatelessWidget {
                 const SizedBox(
                   width: 24,
                 ),
-                const Column(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Cokorda Arturito',
+                      nama,
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
                     Text(
-                      'Cokorda@gmail.com',
+                      email,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.white,
@@ -88,7 +106,8 @@ class ProfileBar extends StatelessWidget {
 }
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  final User user;
+  const ProfilePage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -103,10 +122,10 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(
                 height: 36,
               ),
-              textDisplay('Nama Lengkap', 'Febry'),
-              textDisplay('Email', 'febrytwenido@gmail.com'),
-              textDisplay('Nomor Telepon', '0812 3456 7890'),
-              textDisplay('Alamat', 'Jl. Sukabirus'),
+              textDisplay('Nama Lengkap', user.nama),
+              textDisplay('Email', user.email),
+              textDisplay('Nomor Telepon', user.nomortelepon),
+              textDisplay('Alamat', user.alamat),
               const Divider(
                 color: Color(0xFFE1E1E1),
                 thickness: 2,

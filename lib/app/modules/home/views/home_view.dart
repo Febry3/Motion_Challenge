@@ -8,17 +8,20 @@ class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('HomeView'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'HomeView is working',
-          style: TextStyle(fontSize: 20),
+    Get.put(HomeController());
+    return GetBuilder<HomeController>(builder: (controller) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('HomeView'),
+          centerTitle: true,
         ),
-      ),
-    );
+        body: const Center(
+          child: Text(
+            'HomeView is working',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+      );
+    });
   }
 }
