@@ -1,20 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:motion_challenge/app/data/produk_model.dart';
+import 'package:motion_challenge/app/modules/permintaan/views/permintaan_view.dart';
 
 import '../controllers/produk_controller.dart';
-
-final Produk produk = Produk(
-  nama: 'Brokoli',
-  deskripsi: 'Brokoli segar',
-  kategori: 'Sayuran',
-  harga: 10000,
-  jumlah: 20,
-  durasi: 1,
-  berat: 100,
-  isProses: false,
-);
 
 class ProdukView extends GetView<ProdukController> {
   const ProdukView({super.key});
@@ -22,30 +13,60 @@ class ProdukView extends GetView<ProdukController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        elevation: 10,
+        backgroundColor: const Color(0xFF62C172),
+        child: const Icon(
+          Icons.add,
+          size: 30,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          Get.to(() => const PermintaanView());
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Center(
-        child: Container(
-          color: Color(0xFFE8F9E8),
-          child: Column(
-            children: [
-              const ProdukAppBar(),
-              Expanded(
-                child: GridView.builder(
-                  padding: EdgeInsets.all(10),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        child: Column(
+          children: [
+            const ProdukAppBar(),
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('user1')
+                  .doc('o4xgOYqPwhMCs4d6EFin')
+                  .collection('produkuser1')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text('Tunggu');
+                }
+
+                if (snapshot.hasData == false) {
+                  return Text('Kosong');
+                }
+
+                final data = snapshot.data!.docs;
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(10),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 15,
                     mainAxisSpacing: 15,
                   ),
-                  itemCount: 8,
+                  itemCount: data.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ProdukCard(
-                      input: produk,
+                      nama: data[index]['nama'],
+                      isProses: data[index]['isProses'],
                     );
                   },
-                ),
-              )
-            ],
-          ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -112,9 +133,14 @@ class ProdukAppBar extends StatelessWidget {
 }
 
 class ProdukCard extends StatelessWidget {
-  final Produk input;
+  final nama;
+  final isProses;
 
-  const ProdukCard({super.key, required this.input});
+  const ProdukCard({
+    super.key,
+    this.nama,
+    this.isProses,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -149,14 +175,14 @@ class ProdukCard extends StatelessWidget {
                     height: 8,
                   ),
                   Text(
-                    input.nama,
+                    nama,
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    input.isProses ? 'Proses' : 'Selesai',
+                    isProses ? 'Proses' : 'Selesai',
                     style: TextStyle(
                         fontSize: 12,
-                        color: input.isProses ? Colors.orange : Colors.green),
+                        color: isProses ? Colors.orange : Colors.green),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

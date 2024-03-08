@@ -4,6 +4,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/navbar/bindings/navbar_binding.dart';
 import '../modules/navbar/views/navbar_view.dart';
+import '../modules/permintaan/bindings/permintaan_binding.dart';
+import '../modules/permintaan/views/permintaan_view.dart';
 import '../modules/produk/bindings/produk_binding.dart';
 import '../modules/produk/views/produk_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -35,7 +37,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.PRODUK,
-      page: () => const ProdukView(),
+      page: () => ProdukView(),
       binding: ProdukBinding(),
     ),
     GetPage(
@@ -50,13 +52,18 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.UBAH_PASSWORD,
-      page: () => const UbahPasswordView(),
+      page: () => UbahPasswordView(),
       binding: UbahPasswordBinding(),
     ),
     GetPage(
       name: _Paths.UBAH_PROFIL,
       page: () => const UbahProfilView(),
       binding: UbahProfilBinding(),
+    ),
+    GetPage(
+      name: _Paths.PERMINTAAN,
+      page: () => const PermintaanView(),
+      binding: PermintaanBinding(),
     ),
   ];
 }

@@ -1,23 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:get/get.dart';
 
 class UbahProfilController extends GetxController {
-  //TODO: Implement UbahProfilController
+  void updateHandler(id, newNama, newEmail, newAlamat, newTelepon, password) {
+    final newData = {
+      'nama': newNama,
+      'email': newEmail,
+      'alamat': newAlamat,
+      'nomortelpon': newTelepon,
+      'password': password,
+    };
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+    FirebaseFirestore.instance.collection('user1').doc(id).set(newData);
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

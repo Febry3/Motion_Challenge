@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:motion_challenge/app/data/produk_model.dart';
 import 'package:motion_challenge/app/data/user_model.dart';
 
 class ProfileController extends GetxController {

@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:motion_challenge/app/data/user_model.dart';
 import 'package:motion_challenge/app/modules/ubahPassword/views/ubah_password_view.dart';
 import 'package:motion_challenge/app/modules/ubahProfil/views/ubah_profil_view.dart';
 
@@ -18,18 +18,35 @@ class ProfileView extends GetView<ProfileController> {
         body: SafeArea(
           child: Column(
             children: [
-              ProfileBar(
-                nama: controller.user.nama,
-                email: controller.user.email,
-              ),
-              ProfilePage(
-                user: controller.user,
-              ),
-              GestureDetector(
-                onTap: () {
-                  controller.perubahan();
+              StreamBuilder(
+                stream:
+                    FirebaseFirestore.instance.collection('user1').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text('Tunggu');
+                  }
+
+                  if (snapshot.hasData == false) {
+                    return Text('Kosong');
+                  }
+
+                  final data = snapshot.data!.docs[0];
+                  print(data.id);
+                  return Column(
+                    children: [
+                      ProfileBar(
+                        nama: data['nama'],
+                        email: data['email'],
+                      ),
+                      ProfilePage(
+                        alamat: data['alamat'].toString(),
+                        email: data['email'].toString(),
+                        nama: data['nama'].toString(),
+                        nomortelepon: data['nomortelpon'].toString(),
+                      ),
+                    ],
+                  );
                 },
-                child: Text('test'),
               ),
             ],
           ),
@@ -91,7 +108,7 @@ class ProfileBar extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                Get.to(const UbahProfilView());
+                Get.to(() => const UbahProfilView());
               },
               icon: Image.asset(
                 'assets/images/brush.png',
@@ -106,93 +123,101 @@ class ProfileBar extends StatelessWidget {
 }
 
 class ProfilePage extends StatelessWidget {
-  final User user;
-  const ProfilePage({super.key, required this.user});
+  final String alamat;
+  final String email;
+  final String nama;
+  final String nomortelepon;
+
+  const ProfilePage({
+    super.key,
+    required this.alamat,
+    required this.email,
+    required this.nama,
+    required this.nomortelepon,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 21),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 36,
-              ),
-              textDisplay('Nama Lengkap', user.nama),
-              textDisplay('Email', user.email),
-              textDisplay('Nomor Telepon', user.nomortelepon),
-              textDisplay('Alamat', user.alamat),
-              const Divider(
-                color: Color(0xFFE1E1E1),
-                thickness: 2,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 21),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 36,
+            ),
+            textDisplay('Nama Lengkap', nama),
+            textDisplay('Email', email),
+            textDisplay('Nomor Telepon', nomortelepon),
+            textDisplay('Alamat', alamat),
+            const Divider(
+              color: Color(0xFFE1E1E1),
+              thickness: 2,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Keamanan',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(UbahPasswordView());
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Ubah Password',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        size: 35,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Divider(
+              color: Color(0xFFE1E1E1),
+              thickness: 2,
+            ),
+            const SizedBox(
+              height: 36,
+            ),
+            GestureDetector(
+              onTap: () {
+                print('ketekan');
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Keamanan',
-                    style: TextStyle(fontSize: 16),
+                  Image.asset(
+                    'assets/images/logout.png',
+                    scale: 3.5,
                   ),
                   const SizedBox(
-                    height: 15,
+                    width: 18,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(const UbahPasswordView());
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Ubah Password',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        Icon(
-                          Icons.chevron_right_rounded,
-                          size: 35,
-                        )
-                      ],
-                    ),
+                  const Text(
+                    'Logout Akun',
+                    style: TextStyle(color: Color(0xFF129B29), fontSize: 16),
                   ),
                 ],
               ),
-              const Divider(
-                color: Color(0xFFE1E1E1),
-                thickness: 2,
-              ),
-              const SizedBox(
-                height: 36,
-              ),
-              GestureDetector(
-                onTap: () {
-                  print('ketekan');
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/logout.png',
-                      scale: 3.5,
-                    ),
-                    const SizedBox(
-                      width: 18,
-                    ),
-                    const Text(
-                      'Logout Akun',
-                      style: TextStyle(color: Color(0xFF129B29), fontSize: 16),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

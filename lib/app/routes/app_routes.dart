@@ -10,6 +10,7 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const UBAH_PASSWORD = _Paths.UBAH_PASSWORD;
   static const UBAH_PROFIL = _Paths.UBAH_PROFIL;
+  static const PERMINTAAN = _Paths.PERMINTAAN;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const UBAH_PASSWORD = '/ubah-password';
   static const UBAH_PROFIL = '/ubah-profil';
+  static const PERMINTAAN = '/permintaan';
 }

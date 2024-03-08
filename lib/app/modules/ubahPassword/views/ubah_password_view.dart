@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 import '../controllers/ubah_password_controller.dart';
 
 class UbahPasswordView extends GetView<UbahPasswordController> {
-  const UbahPasswordView({Key? key}) : super(key: key);
+  UbahPasswordView({Key? key}) : super(key: key);
+  final textFieldController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +36,11 @@ class UbahPasswordView extends GetView<UbahPasswordController> {
               ),
             ),
             TextField(
+              controller: textFieldController,
               obscureText: true,
               style: TextStyle(fontSize: 18.0),
             ),
+            Text(textFieldController.text),
             SizedBox(
               height: 12,
             ),
